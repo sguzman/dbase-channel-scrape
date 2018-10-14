@@ -1,0 +1,6 @@
+[submodule "libpqxx"]
+	path = libpqxx
+	url = https://github.com/jtv/libpqxx
+[submodule "gumbo-parser"]
+	path = gumbo-parser
+	url = https://github.com/google/gumbo-parser
