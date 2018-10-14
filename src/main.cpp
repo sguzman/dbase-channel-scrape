@@ -30,16 +30,18 @@ int main(int argc, char* argv[]) noexcept {
   const auto pages{max_pages()};
 
   std::vector vec{pages};
-  for (auto i{1u}; i <= pages; ++i) {
-    vec.push_back(i);
+  {
+    for (auto i{1u}; i <= pages; ++i) {
+      vec.push_back(i);
+    }
+
+    std::random_device rd;
+    std::mt19937 g{rd()};
+    std::shuffle(vec.begin(), vec.end(), g);
   }
 
-  std::random_device rd;
-  std::mt19937 g{rd()};
-  std::shuffle(vec.begin(), vec.end(), g);
-
   for (const auto& v : vec) {
-    std::cout << v << std::endl;
+
   }
 
   return 0;
