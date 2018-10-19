@@ -78,9 +78,9 @@ inline void run() noexcept {
       std::shuffle(vec.begin(), vec.end(), g);
     }
 
+    pqxx::connection C{"dbname=youtube user=postgres host=postgres-service.youtube.svc.cluster.local port=5432"};
+    pqxx::work W{C};
     for (const auto& v : vec) {
-      pqxx::connection C{"dbname=youtube user=postgres host=postgres-service.youtube.svc.cluster.local port=5432"};
-      pqxx::work W{C};
 
       const auto chans{page(v)};
       for (const auto& c : chans) {
@@ -94,9 +94,9 @@ inline void run() noexcept {
       }
 
       W.commit();
-      C.disconnect();
-      C.deactivate();
     }
+    C.disconnect();
+    C.deactivate();
   }
 }
 
