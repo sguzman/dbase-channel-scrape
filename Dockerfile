@@ -1,48 +1,39 @@
-FROM alpine
+FROM alpine:3.8
 MAINTAINER Salvador Guzman <guzmansalv@gmail.com>
 
-RUN apk add --no-cache build-base cmake git libtool automake autoconf curl-dev postgresql-dev
-
-RUN git clone https://github.com/google/gumbo-parser
-RUN git clone https://github.com/lazytiger/gumbo-query
-RUN git clone https://github.com/sguzman/dbase-channel-scrape
-RUN git clone https://github.com/jtv/libpqxx
-
-WORKDIR libpqxx
-RUN mkdir build
-WORKDIR build
-RUN cmake .. -DCMAKE_BUILD_TYPE=Release
-RUN make
-RUN make install
-
-WORKDIR ../../
-
-WORKDIR gumbo-parser
-RUN sh autogen.sh
-RUN ./configure
-RUN make
-RUN make install
-
-WORKDIR ../../
-
-WORKDIR gumbo-query
-WORKDIR build
-RUN cmake .. -DCMAKE_BUILD_TYPE=Release
-RUN make
-RUN make install
-
-WORKDIR ../../
-
-WORKDIR dbase-channel-scrape
-RUN mkdir build
-WORKDIR build
-RUN cmake .. -DCMAKE_BUILD_TYPE=Release
-RUN make
-
-RUN mv dbase-channel-scrape ../../
 WORKDIR /root
+ADD . dbase-channel
 
-#RUN rm -rf dbase-channel-scrape gumbo-parser gumbo-query libpqxx
-#RUN RUN apk del build-base cmake git libtool automake autoconf curl-dev postgresql-dev
+RUN apk add --no-cache --virtual build-dependencies build-base cmake git libtool automake autoconf curl-dev postgresql-dev \
+    && cd /root \
+    && git clone https://github.com/google/gumbo-parser \
+    && git clone https://github.com/lazytiger/gumbo-query \
+    && git clone https://github.com/jtv/libpqxx \
+    && cd libpqxx \
+    && mkdir build \
+    && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=Release \
+    && make \
+    && make install \
+    && cd ../../ \
+    && cd gumbo-parser \
+    && sh autogen.sh \
+    && ./configure \
+    && make \
+    && make install \
+    && cd ../gumbo-query/build \
+    && cmake .. -DCMAKE_BUILD_TYPE=Release \
+    && make \
+    && make install \
+    && cd ../../ \
+    && cd dbase-channel \
+    && mkdir build \
+    && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=Release \
+    && make \
+    && mv dbase_channels ../../ \
+    && cd ../../ \
+    && rm -r dbase-channel gumbo-parser gumbo-query libpqxx \
+    && apk del build-dependencies
 
-ENTRYPOINT ['dbase-channel-scrape']
+ENTRYPOINT ['dbase_channels']
