@@ -62,7 +62,8 @@ inline static std::vector<std::string> page(const unsigned long idx) noexcept {
   return chans;
 }
 
-void main(int argc, char* argv[]) noexcept {
+[[noreturn]]
+inline void run() noexcept {
   while (true) {
     const auto pages{max_pages()};
 
@@ -97,4 +98,8 @@ void main(int argc, char* argv[]) noexcept {
       C.deactivate();
     }
   }
+}
+
+int main(int argc, char* argv[]) noexcept {
+  run();
 }
