@@ -36,4 +36,4 @@ RUN apk add --no-cache --virtual build-dependencies build-base cmake git libtool
     && rm -r dbase-channel gumbo-parser gumbo-query libpqxx \
     && apk del build-dependencies
 
-ENTRYPOINT ['dbase_channels']
+ENTRYPOINT ['dbase_channel']
